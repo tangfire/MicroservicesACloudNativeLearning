@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.6
 // 	protoc        v3.20.3
-// source: price.proto
+// source: book/price.proto
 
 package book
 
@@ -21,7 +21,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type Prive struct {
+type Price struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	MarketPrice   int64                  `protobuf:"varint,1,opt,name=market_price,json=marketPrice,proto3" json:"market_price,omitempty"`
 	SalePrice     int64                  `protobuf:"varint,2,opt,name=sale_price,json=salePrice,proto3" json:"sale_price,omitempty"`
@@ -29,21 +29,21 @@ type Prive struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *Prive) Reset() {
-	*x = Prive{}
-	mi := &file_price_proto_msgTypes[0]
+func (x *Price) Reset() {
+	*x = Price{}
+	mi := &file_book_price_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *Prive) String() string {
+func (x *Price) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Prive) ProtoMessage() {}
+func (*Price) ProtoMessage() {}
 
-func (x *Prive) ProtoReflect() protoreflect.Message {
-	mi := &file_price_proto_msgTypes[0]
+func (x *Price) ProtoReflect() protoreflect.Message {
+	mi := &file_book_price_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -54,52 +54,52 @@ func (x *Prive) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Prive.ProtoReflect.Descriptor instead.
-func (*Prive) Descriptor() ([]byte, []int) {
-	return file_price_proto_rawDescGZIP(), []int{0}
+// Deprecated: Use Price.ProtoReflect.Descriptor instead.
+func (*Price) Descriptor() ([]byte, []int) {
+	return file_book_price_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Prive) GetMarketPrice() int64 {
+func (x *Price) GetMarketPrice() int64 {
 	if x != nil {
 		return x.MarketPrice
 	}
 	return 0
 }
 
-func (x *Prive) GetSalePrice() int64 {
+func (x *Price) GetSalePrice() int64 {
 	if x != nil {
 		return x.SalePrice
 	}
 	return 0
 }
 
-var File_price_proto protoreflect.FileDescriptor
+var File_book_price_proto protoreflect.FileDescriptor
 
-const file_price_proto_rawDesc = "" +
+const file_book_price_proto_rawDesc = "" +
 	"\n" +
-	"\vprice.proto\x12\x04book\"I\n" +
-	"\x05prive\x12!\n" +
+	"\x10book/price.proto\x12\x04book\"I\n" +
+	"\x05Price\x12!\n" +
 	"\fmarket_price\x18\x01 \x01(\x03R\vmarketPrice\x12\x1d\n" +
 	"\n" +
 	"sale_price\x18\x02 \x01(\x03R\tsalePriceB\x11Z\x0fdemo/proto/bookb\x06proto3"
 
 var (
-	file_price_proto_rawDescOnce sync.Once
-	file_price_proto_rawDescData []byte
+	file_book_price_proto_rawDescOnce sync.Once
+	file_book_price_proto_rawDescData []byte
 )
 
-func file_price_proto_rawDescGZIP() []byte {
-	file_price_proto_rawDescOnce.Do(func() {
-		file_price_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_price_proto_rawDesc), len(file_price_proto_rawDesc)))
+func file_book_price_proto_rawDescGZIP() []byte {
+	file_book_price_proto_rawDescOnce.Do(func() {
+		file_book_price_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_book_price_proto_rawDesc), len(file_book_price_proto_rawDesc)))
 	})
-	return file_price_proto_rawDescData
+	return file_book_price_proto_rawDescData
 }
 
-var file_price_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
-var file_price_proto_goTypes = []any{
-	(*Prive)(nil), // 0: book.prive
+var file_book_price_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_book_price_proto_goTypes = []any{
+	(*Price)(nil), // 0: book.Price
 }
-var file_price_proto_depIdxs = []int32{
+var file_book_price_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
 	0, // [0:0] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
@@ -107,26 +107,26 @@ var file_price_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_price_proto_init() }
-func file_price_proto_init() {
-	if File_price_proto != nil {
+func init() { file_book_price_proto_init() }
+func file_book_price_proto_init() {
+	if File_book_price_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_price_proto_rawDesc), len(file_price_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_book_price_proto_rawDesc), len(file_book_price_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   1,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_price_proto_goTypes,
-		DependencyIndexes: file_price_proto_depIdxs,
-		MessageInfos:      file_price_proto_msgTypes,
+		GoTypes:           file_book_price_proto_goTypes,
+		DependencyIndexes: file_book_price_proto_depIdxs,
+		MessageInfos:      file_book_price_proto_msgTypes,
 	}.Build()
-	File_price_proto = out.File
-	file_price_proto_goTypes = nil
-	file_price_proto_depIdxs = nil
+	File_book_price_proto = out.File
+	file_book_price_proto_goTypes = nil
+	file_book_price_proto_depIdxs = nil
 }

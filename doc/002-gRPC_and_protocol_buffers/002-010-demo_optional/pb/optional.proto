@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "demo_optional/pb";
+
+message Book{
+  string title = 1;
+  string author = 2;
+  optional int64 price = 3;
+  
+}

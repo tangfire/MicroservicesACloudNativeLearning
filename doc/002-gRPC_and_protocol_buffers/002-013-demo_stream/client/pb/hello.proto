@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "demo_stream/pb";
+
+service StreamService{
+  rpc LotsOfReplies(HelloRequest) returns (stream HelloResponse){}
+
+  rpc LotsOfGreetings(stream HelloRequest) returns (HelloResponse){}
+
+  rpc BidiHello(stream HelloRequest) returns (stream HelloResponse){}
+
+
+}
+
+message HelloRequest{
+  string name = 1;
+}
+
+message HelloResponse{
+  string reply = 1;
+}

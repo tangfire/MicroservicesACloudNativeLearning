@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "demo_oneof/pb";
+
+// protoc --proto_path=pb --go_out=pb --go_opt=paths=source_relative notice.proto  
+message NoticeRequest{
+  string msg = 1;
+  oneof notice_way{
+    string email = 2;
+    string phone = 3;
+  }
+}
+

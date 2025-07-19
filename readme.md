@@ -185,11 +185,16 @@ https://protobuf.com.cn/overview/
 # Go使用protoc示例
 
 
-> doc/002-gRPC_and_protocol_buffers/002-007-demo
+> doc/002-gRPC_and_protocol_buffers/002-007-demo_import
 
+
+
+# gRPC教程
+
+
+https://www.liwenzhou.com/posts/Go/gRPC/
 
 # 
-
 
 
 

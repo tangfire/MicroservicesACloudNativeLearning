@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "demo_metadata/pb";
+
+message HelloRequest{
+  string name = 1;
+}
+
+message HelloResponse{
+  string res = 1;
+}
+
+service MetadataService{
+  rpc Hello(HelloRequest) returns(HelloResponse){}
+}
+

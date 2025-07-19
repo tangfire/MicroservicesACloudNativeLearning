@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"net"
+	"strings"
 )
 
 type StreamService struct {
@@ -53,6 +54,35 @@ func (s *StreamService) LotsOfGreetings(stream grpc.ClientStreamingServer[pb.Hel
 
 	}
 
+}
+
+func magic(s string) string {
+	s = strings.ReplaceAll(s, "吗", "")
+	s = strings.ReplaceAll(s, "吧", "")
+	s = strings.ReplaceAll(s, "你", "我")
+	s = strings.ReplaceAll(s, "?", "!")
+	s = strings.ReplaceAll(s, "？", "！")
+	return s
+}
+
+func (s *StreamService) BidiHello(stream grpc.BidiStreamingServer[pb.HelloRequest, pb.HelloResponse]) error {
+	for {
+		// 接收流式请求
+		in, err := stream.Recv()
+		if err == io.EOF {
+			return nil
+		}
+		if err != nil {
+			return err
+		}
+
+		reply := magic(in.GetName())
+
+		if err = stream.Send(&pb.HelloResponse{Reply: reply}); err != nil {
+			return err
+		}
+
+	}
 }
 
 func main() {

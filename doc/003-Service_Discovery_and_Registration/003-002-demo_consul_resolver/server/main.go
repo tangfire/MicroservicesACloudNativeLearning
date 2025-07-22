@@ -8,6 +8,9 @@ import (
 	"google.golang.org/grpc"
 	"log"
 	"net"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
 import "google.golang.org/grpc/health"
@@ -49,8 +52,9 @@ func main() {
 	// 将我们的gRPC服务注册到consul
 	// 访问127.0.0.1:8500/ui
 	// 1. 定义我们的服务
+	serviceID := fmt.Sprintf("%s-%s-%d", serviceName, ipinfo.String(), 8993)
 	srv := &api.AgentServiceRegistration{
-		ID:      fmt.Sprintf("%s-%s-%d", serviceName, ipinfo.String(), 8993),
+		ID:      serviceID,
 		Name:    serviceName,
 		Tags:    []string{"tangfire"},
 		Address: ipinfo.String(),
@@ -60,7 +64,7 @@ func main() {
 			GRPC:                           fmt.Sprintf("%s:%d", ipinfo.String(), 8993), // 外网地址
 			Timeout:                        "5s",                                        // 超时时间
 			Interval:                       "5s",
-			DeregisterCriticalServiceAfter: "60s", // 10s之后注销掉不健康的节点
+			DeregisterCriticalServiceAfter: "10m", // 10分钟之后注销掉不健康的节点
 		},
 	}
 
@@ -68,8 +72,25 @@ func main() {
 	cc.Agent().ServiceRegister(srv)
 
 	// 启动服务
-	s.Serve(l)
+	go func() {
+		if err := s.Serve(l); err != nil {
+			fmt.Printf("failed to serve: %v", err)
+			return
+		}
+	}()
 
+	// 从Ctrl + C 退出程序
+	quitCh := make(chan os.Signal, 1)
+	signal.Notify(quitCh, syscall.SIGINT, syscall.SIGTERM)
+	fmt.Println("wait quit signal ......")
+	<-quitCh // 没收到信号就阻塞
+
+	// 程序退出的时候要注销服务
+	fmt.Println("service out...")
+	err = cc.Agent().ServiceDeregister(serviceID) // 注销服务
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 // GetOutboundIP 获取本机的出口IP

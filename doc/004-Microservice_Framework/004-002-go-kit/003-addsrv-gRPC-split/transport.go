@@ -4,33 +4,13 @@ import (
 	"addsrv_gRPC/pb"
 	"context"
 	"encoding/json"
+	"github.com/gin-gonic/gin"
 	grpctransport "github.com/go-kit/kit/transport/grpc"
 	httptransport "github.com/go-kit/kit/transport/http"
 	"net/http"
 )
 
 // transport
-
-// 1.3 请求和响应
-type SumRequest struct {
-	A int `json:"a"`
-	B int `json:"b"`
-}
-
-type SumResponse struct {
-	V   int    `json:"v"`
-	Err string `json:"err,omitempty"`
-}
-
-type ConcatRequest struct {
-	A string `json:"a"`
-	B string `json:"b"`
-}
-
-type ConcatResponse struct {
-	V   string `json:"v"`
-	Err string `json:"err,omitempty"`
-}
 
 type grpcServer struct {
 	pb.UnimplementedAddServer
@@ -39,7 +19,7 @@ type grpcServer struct {
 	concat grpctransport.Handler
 }
 
-func NewHTTPServer(svc AddService) {
+func NewHTTPServer(svc AddService) http.Handler {
 	sumHandler := httptransport.NewServer(
 		makeSumEndpoint(svc),
 		decodeSumRequest,
@@ -52,10 +32,16 @@ func NewHTTPServer(svc AddService) {
 		encodeResponse,
 	)
 
-	http.Handle("/sum", sumHandler)
-	http.Handle("/concat", concatHandler)
+	// github.com/gorilla/mux
+	//r := mux.NewRouter()
+	//r.Handle("/sum", sumHandler).Methods("POST")
+	//r.Handle("/concat", concatHandler).Methods("POST")
 
-	http.ListenAndServe(":8080", nil)
+	// gin
+	r := gin.Default()
+	r.POST("/sum", gin.WrapH(sumHandler))
+	r.POST("/concat", gin.WrapH(concatHandler))
+	return r
 }
 
 func NewGRPCServer(svc AddService) pb.AddServer {
@@ -93,20 +79,21 @@ func (s grpcServer) Concat(ctx context.Context, req *pb.ConcatRequest) (*pb.Conc
 // 3. transport
 // decode
 // 请求来了之后根据 协议(HTTP、HTTP2)和编码(JSON、pb、thrift)去解析数据
+// 修改后的HTTP解码器 - 返回pb结构体指针
 func decodeSumRequest(ctx context.Context, r *http.Request) (interface{}, error) {
-	var req SumRequest
+	var req pb.SumRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		return nil, err
 	}
-	return req, nil
+	return &req, nil // 返回指针类型
 }
 
 func decodeConcatRequest(ctx context.Context, r *http.Request) (interface{}, error) {
-	var req ConcatRequest
+	var req pb.ConcatRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		return nil, err
 	}
-	return req, nil
+	return &req, nil // 返回指针类型
 }
 
 // 编码

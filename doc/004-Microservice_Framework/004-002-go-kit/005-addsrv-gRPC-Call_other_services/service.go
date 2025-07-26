@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/go-kit/kit/endpoint"
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/metrics"
 	"time"
@@ -124,4 +125,40 @@ func (im instrumentingMiddleware) Concat(ctx context.Context, a, b string) (res 
 
 	res, err = im.next.Concat(ctx, a, b)
 	return
+}
+
+// trim相关
+type withTrimMiddleware struct {
+	next        AddService
+	trimService endpoint.Endpoint // trim 交给这个endpoint处理
+}
+
+func NewServiceWithTrim(trimEndpoint endpoint.Endpoint, svc AddService) AddService {
+	return &withTrimMiddleware{
+		trimService: trimEndpoint,
+		next:        svc,
+	}
+}
+
+func (tm withTrimMiddleware) Sum(ctx context.Context, a, b int) (int, error) {
+
+	return tm.next.Sum(ctx, a, b)
+
+}
+
+func (tm withTrimMiddleware) Concat(ctx context.Context, a, b string) (string, error) {
+	// 外部调用我们的Concat方法时
+	// 1. 发起RPC调用 trim_service对数据进行处理（调用其他服务/依赖其他的服务）
+	respA, err := tm.trimService(ctx, trimRequest{s: a}) // 执行，其实是作为客户端对外发起请求
+	if err != nil {
+		return "", err
+	}
+	respB, err := tm.trimService(ctx, trimRequest{s: b})
+	if err != nil {
+		return "", err
+	}
+
+	trimA := respA.(trimResponse)
+	trimB := respB.(trimResponse)
+	return tm.next.Concat(ctx, trimA.s, trimB.s)
 }

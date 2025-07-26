@@ -4,7 +4,18 @@ import (
 	"addsrv_gRPC/pb"
 	"context"
 	"github.com/go-kit/kit/endpoint"
+	grpctransport "github.com/go-kit/kit/transport/grpc"
+	"google.golang.org/grpc"
 )
+
+// trim
+type trimRequest struct {
+	s string
+}
+
+type trimResponse struct {
+	s string
+}
 
 // endpoint
 // 一个endpoint表示对外提供的一个方法
@@ -33,4 +44,15 @@ func makeConcatEndpoint(svc AddService) endpoint.Endpoint {
 		// 返回 pb 结构体指针
 		return &pb.ConcatResponse{V: v}, nil
 	}
+}
+
+func makeTrimEndpoint(conn *grpc.ClientConn) endpoint.Endpoint {
+	return grpctransport.NewClient(
+		conn,
+		"pb.Trim",          // 服务名
+		"TrimSpace",        // 方法名
+		encodeTrimRequest,  // 编码
+		decodeTrimResponse, // 解码
+		pb.TrimResponse{},  // 接收结果
+	).Endpoint()
 }

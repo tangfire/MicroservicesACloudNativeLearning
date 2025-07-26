@@ -11,6 +11,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"golang.org/x/sync/errgroup"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"net"
 	"net/http"
 	"os"
@@ -19,9 +20,11 @@ import (
 var (
 	httpAddr = flag.Int("http-addr", 8080, "http listen address")
 	gRPCAddr = flag.Int("grpc-addr", 8972, "gRPC listen address")
+	trimAddr = flag.String("trim-addr", "127.0.0.1:8975", "trim-service地址")
 )
 
 func main() {
+	flag.Parse()
 	// 前置初始化
 
 	srv := NewService()
@@ -50,6 +53,19 @@ func main() {
 	}, []string{}) // no fields here
 
 	srv = NewInstrumentingMiddleware(requestCount, requestLatency, countResult, srv)
+
+	// trim 相关
+	// 1. init grpc client
+	conn, err := grpc.Dial(*trimAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		fmt.Printf("grpc.Dial %s failed,err:%v\n", *trimAddr, err)
+		return
+	}
+
+	defer conn.Close()
+
+	trimEndpoint := makeTrimEndpoint(conn)
+	srv = NewServiceWithTrim(trimEndpoint, srv)
 
 	var g errgroup.Group
 

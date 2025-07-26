@@ -22,6 +22,7 @@ var (
 )
 
 func main() {
+	flag.Parse()
 	// 前置初始化
 
 	srv := NewService()

@@ -1,0 +1,58 @@
+syntax = "v1"
+
+info (
+	title:   "mall"
+	desc:    "go-zero学习项目"
+	author:  "tangfire"
+	email:   "123456@qq.com"
+	version: "1.0"
+)
+
+// 定义类型
+type SignupRequest {
+	Username   string `json:"username"`
+	Password   string `json:"password"`
+	RePassword string `json:"re_password"`
+	Gender     int    `json:"gender,options=0|1|2,default=0"`
+}
+
+type SignupResponse {
+	Message string `json:"message"`
+}
+
+@server (
+	prefix: api
+)
+service user-api {
+	@handler SignupHandler
+	post /user/signup (SignupRequest) returns (SignupResponse)
+
+	@handler LoginHandler
+	post /user/login (LoginRequest) returns (LoginResponse)
+
+	@handler DetailHandler
+	get /user/detail (DetailRequest) returns (DetailResponse)
+}
+
+// 登录
+type LoginRequest {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+type LoginResponse {
+	Message string `json:"message"`
+}
+
+// 用户详情
+// 用户详情接口需要登录之后才能访问，需要认证auth
+
+type DetailRequest {
+	UserID int64 `form:"userID"`
+}
+
+type DetailResponse {
+	Username string `json:"userName"`
+	Gender   int    `json:"gender"`
+}
+

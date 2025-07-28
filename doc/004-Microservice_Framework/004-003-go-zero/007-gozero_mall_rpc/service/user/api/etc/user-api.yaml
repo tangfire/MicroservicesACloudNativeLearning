@@ -1,0 +1,24 @@
+Name: user-api
+Host: 0.0.0.0
+Port: 8888
+Mysql:
+  DataSource: root:8888.216@tcp(127.0.0.1:3306)/db?parseTime=true
+
+CacheRedis:
+  - Host: 127.0.0.1:6379
+    Pass: "8888.216"
+
+
+
+Log:
+  ServiceName: "user-srv"
+  Mode: console
+  Encoding: json
+  Path: logs
+  Level: info
+  Stat: true
+
+
+Auth:
+  AccessSecret: "tangfire"
+  AccessExpire: 60

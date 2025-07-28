@@ -1,0 +1,13 @@
+Name: user.rpc
+ListenOn: 0.0.0.0:8080
+Etcd:
+  Hosts:
+  - 127.0.0.1:2379
+  Key: user.rpc
+
+Mysql:
+  DataSource: root:8888.216@tcp(127.0.0.1:3306)/db?parseTime=true&loc=Asia%2FShanghai
+
+CacheRedis:
+  - Host: 127.0.0.1:6379
+    Pass: "8888.216"

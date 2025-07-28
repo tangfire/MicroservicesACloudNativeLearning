@@ -1,10 +1,10 @@
 package main
 
 import (
-	"MicroservicesACloudNativeLearning/doc/004-Microservice_Framework/004-003-go-zero/006-gozero_mall_middleware/service/user/api/internal/config"
-	"MicroservicesACloudNativeLearning/doc/004-Microservice_Framework/004-003-go-zero/006-gozero_mall_middleware/service/user/api/internal/handler"
-	"MicroservicesACloudNativeLearning/doc/004-Microservice_Framework/004-003-go-zero/006-gozero_mall_middleware/service/user/api/internal/middleware"
-	"MicroservicesACloudNativeLearning/doc/004-Microservice_Framework/004-003-go-zero/006-gozero_mall_middleware/service/user/api/internal/svc"
+	"MicroservicesACloudNativeLearning/doc/004-Microservice_Framework/004-003-go-zero/007-gozero_mall_rpc/service/user/api/internal/config"
+	"MicroservicesACloudNativeLearning/doc/004-Microservice_Framework/004-003-go-zero/007-gozero_mall_rpc/service/user/api/internal/handler"
+	"MicroservicesACloudNativeLearning/doc/004-Microservice_Framework/004-003-go-zero/007-gozero_mall_rpc/service/user/api/internal/middleware"
+	"MicroservicesACloudNativeLearning/doc/004-Microservice_Framework/004-003-go-zero/007-gozero_mall_rpc/service/user/api/internal/svc"
 	"flag"
 	"fmt"
 
